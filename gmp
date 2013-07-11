@@ -5,8 +5,6 @@ require 'io/console'
 
 # The header that's going to be at the top of each page
 def header(page)
-system 'cls'
-system 'clear'
 
 puts <<-eos
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -45,6 +43,7 @@ def inbox(gmail)
 	gmail.messages.each_with_index do |message, count|
 	    # Add a +1 so it's human readable (1-10), instead of 0-9
 	    puts "#{count+1}: #{message["header"]["Subject"]} \n\n"
+		break
 	end
 
 	puts "\nWould you like to see more about a particular message? (\"exit\" exits)"
@@ -127,4 +126,3 @@ eos
 	message(gmail, message)
 end
 
-intro()
