@@ -1,0 +1,22 @@
+Sender: loraxx753@gmail.com
+Received: by 10.52.33.239 with HTTP; Wed, 10 Jul 2013 16:53:39 -0700 (PDT)
+Date: Wed, 10 Jul 2013 19:53:39 -0400
+Delivered-To: loraxx753@gmail.com
+X-Google-Sender-Auth: qeQSNkVtsC6f6LiyZCUrDLZKjJ4
+Message-ID: <CAKYGQyrYPJp+KQCS6z8C6rJ+ZaukY3wkejZnmWVaETojSddxdw@mail.gmail.com>
+Subject: This is a test case
+From: Kevin Baugh <me@kevinbaugh.com>
+To: Kevin Baugh <Loraxx753@gmail.com>
+Content-Type: multipart/alternative; boundary=20cf307cffea9325ca04e130fcb2
+
+--20cf307cffea9325ca04e130fcb2
+Content-Type: text/plain; charset=ISO-8859-1
+
+This is a test case of an email being sent
+
+--20cf307cffea9325ca04e130fcb2
+Content-Type: text/html; charset=ISO-8859-1
+
+<div dir="ltr">This is a test case of an email being sent</div>
+
+--20cf307cffea9325ca04e130fcb2--

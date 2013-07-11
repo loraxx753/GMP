@@ -1,0 +1,130 @@
+#!/usr/bin/env ruby
+
+require "./emailreader"
+require 'io/console'
+
+# The header that's going to be at the top of each page
+def header(page)
+system 'cls'
+system 'clear'
+
+puts <<-eos
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#                                                                     #
+#                                                                     #
+#                      GOOGLE MAIL PARSER                             #
+#                                                                     #
+#                                                                     #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+#{page.upcase}
+
+eos
+
+end
+
+# It all starts here
+def intro()
+	header("welcome")
+	puts "Welcome to my email thingie, put in your gmail email address and password for me here..."
+
+	puts "-- Press ANY KEY to get started --"
+	gets
+
+	# Creates a new EmailReader and get's the inbox
+	gmail = EmailReader.new()
+	gmail.get_inbox
+	inbox(gmail)
+end
+
+# Takes the EmailReader information and displays the inbox
+def inbox(gmail)
+	header("inbox")
+	
+	# Loops through all of the messages to get the subjects	
+	gmail.messages.each_with_index do |message, count|
+	    # Add a +1 so it's human readable (1-10), instead of 0-9
+	    puts "#{count+1}: #{message["header"]["Subject"]} \n\n"
+	end
+
+	puts "\nWould you like to see more about a particular message? (\"exit\" exits)"
+	choice = $stdin.gets.chomp
+	case choice
+	when '1'..'10'
+		#take their choice from regular number to place in array
+		choice = choice.to_i - 1
+		message(gmail, choice)
+	when 'exit'
+		exit
+	else
+		# Gotta check for non valid options
+		puts "That's not a valid option"
+		puts "-- Press ANY KEY to try again --"
+		gets
+		inbox(gmail)
+	end
+end
+
+def message(gmail, choice)
+	chosen_message = gmail.messages[choice]
+
+	header("MESSAGE: #{message["header"]["Subject"]}")
+	puts "Alright, the message is all loaded up, what do you want to know about it?\n\n"
+	puts "Options are:"
+
+	option_keys = chosen_message.keys
+
+	option_keys.each do |part|
+		if !chosen_message[part].nil?
+			puts "\t"+part
+		end
+	end
+
+	puts <<-eos
+	To
+	From
+	Date
+	Subject
+	Content-Type
+
+To go back, type "back". Also, you can type "exit" to exit.
+
+eos
+	option = $stdin.gets.chomp
+
+	header(option)
+
+	# Since all of the options available are part of the hash that
+	# comes back, we can just use the option to choose itself
+	case option
+	when "header", "html", "plaintext"
+		# The header is a has, so check for that and loop through it
+		# properly
+		if message[option].class == Hash
+			message[option].each do |item|
+				puts "\t#{item[0]} - #{item[1]}"
+			end
+		else
+			puts "\t#{message[option]}"
+		end
+	when "back"
+		inbox(gmail)
+	when "exit"
+		exit
+	else
+		# If it's not any of the above, it must be a header option
+		# Want to make sure though
+		if(message["header"].has_key?(option))
+			puts message["header"][option]
+		else
+			puts "That's not really a valid option (stick to the stuff above...)"
+		end
+	end
+
+	puts "-- Press ANY KEY to go back --"
+	gets
+
+	message(gmail, message)
+end
+
+intro()
